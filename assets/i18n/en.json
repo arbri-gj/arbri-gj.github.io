@@ -1,0 +1,61 @@
+{
+  "search": "Search",
+  "clear": "Clear",
+  "searchOptions": "Search Options",
+  "next": "Next",
+  "previous": "Previous",
+  "page": "Page",
+  "sources": "Sources",
+  "developedBy": "Developed by",
+  "companyName": "Company",
+  "experience": "Experience",
+  "languageRequired": "Language",
+  "share": "Share",
+  "checkJob": "View",
+  "gotoPage": "Go to page",
+  "close": "Close",
+  "nothingFound": "No job postings found",
+  "deleteAll": "Delete all",
+  "oneOfKeywords": "Contains one of the keywords",
+  "allKeywords": "Contains all the keywords",
+  "normalSearch": "Strict search by word order",
+  "saveKeywords": "Save search keywords",
+
+
+  "newIdeaSection": {
+    "ifYouHaveIdea": "If you have an idea",
+    "forAnyApp": "for any application/portal/platform that might be needed in daily life, we can realize it together.",
+    "contactMeToSpeak": "Contact me to discuss further."
+  },
+
+  "configurationSection": {
+    "saveFavoriteSearch": "Save your preferred search option that the application will use",
+    "oneOfKeywordDescription": "This is the default search method. If you write several keywords, the postings will be sorted by the highest number of keywords found in the posting. Here, the results will be larger as it is enough to find 1 keyword in the posting for it to appear, but the first pages are exactly those postings that might interest you the most. Search example: music teacher Shkoder afternoon part time => all postings that include at least one of the words will be shown, but at the beginning, the postings that have more of the searched words will appear.",
+    "allKeywordDescription": "Postings that have all the words you searched for in the posting will be displayed. If one of the words is missing, the posting will not appear.",
+    "normalSearchDescription": "Only postings according to the words you have written will be displayed. If you wrote 'music teacher', only postings that have the phrase 'music teacher' will be shown. If the posting has somewhere written 'Teacher needed for music subject', then the posting will not be shown because the phrase 'music teacher' is not found together. The posting would be shown only if one of the other two search options was selected.",
+    "savedSearches": "Saved Searches",
+    "noSavedSearches": "You have not saved any searches"
+  },
+
+  "header": {
+    "mainPage": "Main Page",
+    "idea": "Got an idea?",
+    "configurations": "Settings",
+    "aboutApp": "About the App"
+  },
+
+  "aboutAppSection": {
+    "title": "About \"Kërko Punë\" (BETA version)",
+    "firstParagraphNotBold": "The \"Kërko Punë\" application gathers job postings from various sources and concentrates them in one place, making the job search process easier for job seekers.",
+    "firstParagraphBold": "Each posting contains the source attribute from where it was taken as a posting and the redirection to the original page. The application serves more as a search engine.",
+    "secondParagraph": "Postings will be updated at least once a day. The application is designed in such a way that users need to navigate to the source pages since the postings are not shown in full.",
+    "thirdParagraph": "Portals interested in displaying their postings in this application,",
+    "thirdParagraphLink": "can send me a request.",
+    "fourthParagraph": "Additionally, for page owners who do not want their postings to be shown in the application,",
+    "fourthParagraphLink": "can contact me to request their removal.",
+    "fourthParagraphLast": "The request should preferably be sent from an official email.",
+    "fifthParagraph": "If you have an idea for any application/portal/platform that might be needed in daily life, we can realize it together.",
+    "fifthParagraphLink": "Contact me to discuss further.",
+    "contacts": "Contacts"
+  }
+}

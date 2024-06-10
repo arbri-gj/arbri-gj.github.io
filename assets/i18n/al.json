@@ -1,0 +1,60 @@
+{
+  "search": "Kërko",
+  "clear": "Fshij",
+  "searchOptions": "Opsione Kërkimi",
+  "next": "Tjetra",
+  "previous": "Para",
+  "page": "Faqja",
+  "sources": "Burimet",
+  "developedBy": "Zhvilluar nga",
+  "companyName": "Kompania",
+  "experience": "Eksperienca",
+  "languageRequired": "Gjuha",
+  "share": "Shpërndaje",
+  "checkJob": "Shiko",
+  "gotoPage": "Shko tek faqja",
+  "close": "Mbylle",
+  "nothingFound": "Nuk u gjetën njoftime",
+  "deleteAll": "Fshiji të gjitha",
+  "oneOfKeywords": "Përmban një nga fjalët kyçe",
+  "allKeywords": "Përmban të gjitha fjalët kyçe",
+  "normalSearch": "Kërkim strikt sipas rendit të fjalëve",
+  "saveKeywords": "Ruaj fjalët e kërkimit",
+
+  "newIdeaSection": {
+    "ifYouHaveIdea": "Nëse ke një ide",
+    "forAnyApp": "për ndonjë aplikacion/portal/platformë që mund të nevojitet në përditshmëri, mund ta realizojmë së bashku.",
+    "contactMeToSpeak": "Më kontaktoni që ta bidesdojmë për më gjatë."
+  },
+
+  "configurationSection": {
+    "saveFavoriteSearch": "Ruani opsionin e preferuar të kërkimit që do të përdori aplikacioni",
+    "oneOfKeywordDescription": "Kjo është mënyra e parapërzgjedhur e kërkimit. Nëse do të shkruani disa fjalë kyçe, njoftimet do të renditen nga numri më i madh i fjalëve kyçe që gjenden në njoftim. Këtu rezultatet do të jenë më të mëdha pasi mjafton të gjendet 1 fjalë kyçe në njoftim që të shfaqet, por faqet e para janë pikërisht ata njoftime që mund tju interesojnë më së shumti. Shembull kërkimi: mesuese muzike Shkoder pasdite part time => do të shfaqen të gjitha njoftimet që përfshijnë të paktën një nga fjalët, por të renditura në fillim do të shfaqen ata njoftime që kanë më shumë nga fjalët e kërkuara.",
+    "allKeywordDescription": "Do të shfaqen njoftimet të cilat kanë të gjitha fjalët e kërkuara nga ju në njoftim. Nëse nuk ka një nga fjalët, atëherë njoftimi nuk do të shfaqet.",
+    "normalSearchDescription": "Do të shfaqen vetëm ato njoftime sipas fjalëve që keni shkruar. Nëse keni shkruar \"mesuese muzike\", do të shfaqen vetëm njoftimet që kanë togfjalëshin \"mesuese muzike\". Nëse njoftimi ka diku të shkruar \"Kerkohet mesuese per lenden e muzikes\", atëherë njoftimi nuk do të shfaqet pasi nuk gjendet askund bashkë togfjalëshi \"mesuese muzike\". Njoftimi do të shfaqej vetëm nëse do ishte përzgjedhur njëri nga 2 opsionet e tjera të kërkimit.",
+    "savedSearches": "Kërkimet e ruajtura",
+    "noSavedSearches": "Nuk keni të ruajtur asnjë kërkim"
+  },
+
+  "header": {
+    "mainPage": "Faqja Kryesore",
+    "idea": "Ke një ide?",
+    "configurations": "Konfigurime",
+    "aboutApp": "Rreth Aplikacionit"
+  },
+
+  "aboutAppSection": {
+    "title": "Rreth \"Kërko Punë\" (versioni BETA)",
+    "firstParagraphNotBold": "Aplikacioni \"Kërko Punë\" mbledh njoftime nga burime të ndryshme dhe i përqendron në një vend të vetëm, duke e bërë më të lehtë procesin e kërkimit për punëkërkuesit.",
+    "firstParagraphBold": "Çdo njoftim përmban atributin e burimit nga është marrë si njoftim dhe ridrejtimin në faqen origjinale. Aplikacioni shërben më shumë si motor kërkimi.",
+    "secondParagraph": "Njoftimet do të përditësohen të paktën një herë në ditë. Aplikacioni është i ndërtuar në mënyrë të atillë që përdoruesit duhet të lundrojnë në faqet burimore pasi njoftimet nuk tregohen të plota.",
+    "thirdParagraph": "Portalet që janë të interesuara për të shfaqur njoftimet e tyre në këtë aplikacion,",
+    "thirdParagraphLink": "mund të më dërgojnë kërkesën.",
+    "fourthParagraph": "Gjithashtu, për zotëruesit e faqeve që nuk dëshirojnë të shfaqen njoftimet e tyre në aplikacion,",
+    "fourthParagraphLink": "mund të më kontaktojnë për të kërkuar heqjen e tyre.",
+    "fourthParagraphLast": "Kërkesa, mundësisht, të dërgohet nga email zyrtar.",
+    "fifthParagraph": "Nëse ke një ide për ndonjë aplikacion/portal/platformë që mund të nevojitet në përditshmëri, mund ta realizojmë së bashku.",
+    "fifthParagraphLink": "Më kontaktoni që ta bisedojmë për më gjatë.",
+    "contacts": "Kontakte"
+  }
+}
