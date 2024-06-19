@@ -20,6 +20,13 @@
   "allKeywords": "Përmban të gjitha fjalët kyçe",
   "normalSearch": "Kërkim strikt sipas rendit të fjalëve",
   "saveKeywords": "Ruaj fjalët e kërkimit",
+  "searchHint": "Meqë njoftimet mund të postohen në gjuhë të ndryshme, rekomandohet të kërkohet duke shkruar fjalët në gjuhët përkatëse",
+  "searchExists": "Ekziston kërkimi",
+  "moreThan10Searches": "Nuk mund të ruash më shume se 10 kërkime",
+  "savedSuccessfully": "U ruajt me sukses",
+  "singleDeleted": "U fshi me sukses",
+  "allDeletedSuccess": "U fshinë me sukses",
+  "notDeleted": "Nuk u fshinë",
 
   "newIdeaSection": {
     "ifYouHaveIdea": "Nëse ke një ide",

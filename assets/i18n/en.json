@@ -16,10 +16,17 @@
   "close": "Close",
   "nothingFound": "No job postings found",
   "deleteAll": "Delete all",
-  "oneOfKeywords": "Contains one of the keywords",
-  "allKeywords": "Contains all the keywords",
+  "oneOfKeywords": "Contains one of keywords",
+  "allKeywords": "Contains all keywords",
   "normalSearch": "Strict search by word order",
   "saveKeywords": "Save search keywords",
+  "searchHint": "Meqë njoftimet mund të postohen në gjuhë të ndryshme, rekomandohet të kërkohet duke shkruar fjalët në gjuhët përkatëse",
+  "searchExists": "Search already exists",
+  "moreThan10Searches": "You cannot save more than 10 searches",
+  "savedSuccessfully": "Saved successfully",
+  "singleDeleted": "Deleted successfully",
+  "allDeletedSuccess": "All deleted successfully",
+  "notDeleted": "Not deleted",
 
 
   "newIdeaSection": {
