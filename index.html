@@ -47,28 +47,34 @@
     .spinner-image {
       width: 50px;
       height: 50px;
-      border-radius: 50%;
-      overflow: hidden;
       position: relative;
     }
 
     .spinner-image img {
-      position: absolute;
-      top: 0;
-      left: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transform: translateX(-100%);
+      border-radius: 50%;
+      background-color: #ffffff; /* White background for the image */
+    }
+
+    .progress-bar {
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 4px;
+      background-color: #00B074; /* Green color for the progress bar */
       animation: fill 2s linear infinite;
     }
 
     @keyframes fill {
       0% {
-        transform: translateX(-100%);
+        width: 0;
       }
       100% {
-        transform: translateX(0%);
+        width: 50px;
       }
     }
   </style>
@@ -77,6 +83,7 @@
 <div class="spinner-container" id="spinner">
   <div class="spinner-image">
     <img src="assets/icon-only.png" alt="Loading Image">
+    <div class="progress-bar"></div>
   </div>
 </div>
   <app-root></app-root>
@@ -88,7 +95,7 @@
     }
   });
 </script>
-<script src="polyfills-A7MJM4D4.js" type="module"></script><script src="scripts-CWJO5AXB.js" defer></script><script src="main-IVEXYAQZ.js" type="module"></script></body>
+<script src="polyfills-A7MJM4D4.js" type="module"></script><script src="scripts-CWJO5AXB.js" defer></script><script src="main-EKUYZZ4M.js" type="module"></script></body>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="assets/lib/wow/wow.min.js"></script>
