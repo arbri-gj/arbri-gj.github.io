@@ -20,6 +20,7 @@
   "allKeywords": "Përmban të gjitha fjalët kyçe",
   "normalSearch": "Kërkim strikt sipas rendit të fjalëve",
   "saveKeywords": "Ruaj fjalët e kërkimit",
+  "saveExcludes": "Ruaj fjalët përjashtuese",
   "searchHint": "Meqë njoftimet mund të postohen në gjuhë të ndryshme, rekomandohet të kërkohet duke shkruar fjalët në gjuhët përkatëse",
   "searchExists": "Ekziston kërkimi",
   "moreThan10Searches": "Nuk mund të ruash më shume se 10 kërkime",
@@ -42,7 +43,9 @@
     "allKeywordDescription": "Do të shfaqen njoftimet të cilat kanë të gjitha fjalët e kërkuara nga ju në njoftim. Nëse nuk ka një nga fjalët, atëherë njoftimi nuk do të shfaqet.",
     "normalSearchDescription": "Do të shfaqen vetëm ato njoftime sipas fjalëve që keni shkruar. Nëse keni shkruar \"mesuese muzike\", do të shfaqen vetëm njoftimet që kanë togfjalëshin \"mesuese muzike\". Nëse njoftimi ka diku të shkruar \"Kerkohet mesuese per lenden e muzikes\", atëherë njoftimi nuk do të shfaqet pasi nuk gjendet askund bashkë togfjalëshi \"mesuese muzike\". Njoftimi do të shfaqej vetëm nëse do ishte përzgjedhur njëri nga 2 opsionet e tjera të kërkimit.",
     "savedSearches": "Kërkimet e ruajtura",
-    "noSavedSearches": "Nuk keni të ruajtur asnjë kërkim"
+    "noSavedSearches": "Nuk keni të ruajtur asnjë kërkim",
+    "savedExcludes": "Fjalët përjashtuese të ruajtura",
+    "noSavedExcludes": "Nuk keni të ruajtur asnjë fjalë/togfjalësh përjashtues"
   },
 
   "header": {

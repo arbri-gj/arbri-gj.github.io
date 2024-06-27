@@ -20,6 +20,7 @@
   "allKeywords": "Contains all keywords",
   "normalSearch": "Strict search by word order",
   "saveKeywords": "Save search keywords",
+  "saveExcludes": "Save excluding words",
   "searchHint": "Meqë njoftimet mund të postohen në gjuhë të ndryshme, rekomandohet të kërkohet duke shkruar fjalët në gjuhët përkatëse",
   "searchExists": "Search already exists",
   "moreThan10Searches": "You cannot save more than 10 searches",
@@ -43,7 +44,9 @@
     "allKeywordDescription": "Postings that have all the words you searched for in the posting will be displayed. If one of the words is missing, the posting will not appear.",
     "normalSearchDescription": "Only postings according to the words you have written will be displayed. If you wrote 'music teacher', only postings that have the phrase 'music teacher' will be shown. If the posting has somewhere written 'Teacher needed for music subject', then the posting will not be shown because the phrase 'music teacher' is not found together. The posting would be shown only if one of the other two search options was selected.",
     "savedSearches": "Saved Searches",
-    "noSavedSearches": "You have not saved any searches"
+    "noSavedSearches": "You have not saved any searches",
+    "savedExcludes": "Saved excluded keywords",
+    "noSavedExcludes": "You have not saved any excluded keywords"
   },
 
   "header": {
