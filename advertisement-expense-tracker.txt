@@ -1,0 +1,18 @@
+[
+  {
+    "image": "https://arbri-gj.github.io/raiff1.jpg",
+    "linkUrl": "https://google.com"
+  },
+  {
+    "image": "https://arbri-gj.github.io/raiff2.jpg",
+    "linkUrl": "https://yahoo.com"
+  },
+  {
+    "image": "https://arbri-gj.github.io/raiff3.jpg",
+    "linkUrl": ""
+  },
+  {
+    "image": "https://arbri-gj.github.io/raiff4.jpg",
+    "linkUrl": "https://facebook.com"
+  }
+]
