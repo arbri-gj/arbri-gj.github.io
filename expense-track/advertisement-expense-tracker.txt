@@ -1,18 +1,10 @@
 [
   {
-    "image": "https://arbri-gj.github.io/raiff1.jpg",
-    "linkUrl": "https://google.com"
+    "image": "https://arbri-gj.github.io/expense-tracker/media/animalsneedme.jpg",
+    "linkUrl": "https://facebook.com/animalsneedme"
   },
   {
-    "image": "https://arbri-gj.github.io/raiff2.jpg",
-    "linkUrl": "https://yahoo.com"
-  },
-  {
-    "image": "https://arbri-gj.github.io/raiff3.jpg",
-    "linkUrl": ""
-  },
-  {
-    "image": "https://arbri-gj.github.io/raiff4.jpg",
-    "linkUrl": "https://facebook.com"
+    "image": "https://arbri-gj.github.io/expense-tracker/media/fundjavendryshe.jpg",
+    "linkUrl": "https://facebook.com/FundjaveNdryshe"
   }
 ]
