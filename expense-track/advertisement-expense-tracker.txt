@@ -1,10 +1,10 @@
 [
   {
-    "image": "https://arbri-gj.github.io/expense-tracker/media/animalsneedme.jpg",
+    "image": "https://arbri-gj.github.io/expense-track/media/animalsneedme.jpg",
     "linkUrl": "https://facebook.com/animalsneedme"
   },
   {
-    "image": "https://arbri-gj.github.io/expense-tracker/media/fundjavendryshe.jpg",
+    "image": "https://arbri-gj.github.io/expense-track/media/fundjavendryshe.jpg",
     "linkUrl": "https://facebook.com/FundjaveNdryshe"
   }
 ]
