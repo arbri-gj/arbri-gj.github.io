@@ -227,6 +227,10 @@ button.equals {
     background: #ff3b30;
   }
 
+button.delete {
+  background: #ff9500;
+  color: #000;
+}
 
 
   button:active {
@@ -310,7 +314,10 @@ button.equals {
   <button onclick="appendValue('+')" class="operator">+</button>
 
   <!-- Row 5 -->
-  <button class="clear" onclick="clearDisplay()">C</button>
+<!-- Row 5 -->
+<button class="clear" onclick="clearDisplay()">C</button>
+<button class="delete" onclick="deleteLast()">Del</button>
+</button>
 </div>
 
 </div>
@@ -364,6 +371,13 @@ button.equals {
 
  
   clearDisplay();
+  
+  function deleteLast() {
+  // Remove last character from expression
+  expression = expression.slice(0, -1);
+  line2.innerText = expression || "";  // empty string if nothing left
+}
+
 </script>
 
 
