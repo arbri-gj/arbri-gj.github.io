@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mobile Calculator</title>
+
+<style>
+  /* Hide on non-mobile screens */
+  @media (min-width: 769px) {
+    body {
+      display: none;
+    }
+  }
+
+  body {
+    margin: 0;
+    height: 100vh;
+    background: #121212;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: system-ui, sans-serif;
+  }
+
+  .calculator {
+    width: 100%;
+    max-width: 360px;
+    padding: 16px;
+  }
+
+ .display {
+  height: 100px;
+  background: #1e1e1e;
+  color: #fff;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.line1 {
+  font-size: 1rem;
+  opacity: 0.8;
+  text-align: left;
+}
+
+.line2 {
+  font-size: 2.4rem;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 6px;
+  word-wrap: break-word;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+
+.hat {
+  width: 26px;
+  height: 12px;
+  background: #ff69b4;
+  border-radius: 6px 6px 2px 2px;
+  position: relative;
+}
+
+.hat::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: -6px;
+  width: 38px;
+  height: 6px;
+  background: #ff69b4;
+  border-radius: 6px;
+}
+
+
+.buttons.numpad {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+button.zero {
+  grid-column: span 2;
+  font-size: 1.6rem;
+}
+
+button.equals {
+  grid-row: span 2;
+  height: 140px;
+}
+
+
+
+.stickman {
+  position: absolute;
+  top: 120px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.stickman .hat {
+  width: 24px;
+  height: 12px;
+  background: #ff69b4;
+  border-radius: 6px 6px 2px 2px;
+  position: relative;
+}
+.stickman .hat::after {
+  content: "";
+  position: absolute;
+  bottom: -3px;
+  left: -4px;
+  width: 32px;
+  height: 5px;
+  background: #ff69b4;
+  border-radius: 6px;
+}
+
+
+.stickman .head {
+  width: 18px;
+  height: 18px;
+  background: #ffe0bd;
+  border-radius: 50%;
+  margin-top: -2px;
+}
+
+
+.stickman .body {
+  width: 4px;
+  height: 40px;
+  background: #000;
+}
+
+
+
+.stickman .shirt {
+  width: 24px;
+  height: 16px;
+  background: #3498db;
+  margin-top: -4px;
+  border-radius: 4px;
+}
+
+.stickman .legs {
+  position: relative;
+  width: 24px; 
+  height: 20px;
+  display: flex;
+  justify-content: center; 
+  gap: 6px; 
+  margin-top: -2px;
+}
+
+
+.stickman .arms {
+  width: 40px;
+  height: 4px;
+  background: #ffe0bd; 
+  margin-top: -36px;
+}
+
+
+.stickman .legs .leg {
+  width: 4px;
+  height: 20px;
+  background: #ffe0bd; 
+}
+
+
+
+
+.stickman .fun-prop {
+  position: absolute;
+  bottom: 15px; 
+  left: 50%;
+  width: 4px;   
+  height: 2px;  
+  background: orange;
+  border-radius: 2px;
+  transform: translateX(-50%);
+}
+
+
+
+
+
+  .buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+
+  button {
+    height: 64px;
+    font-size: 1.4rem;
+    border: none;
+    border-radius: 16px;
+    background: #2a2a2a;
+    color: #fff;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  button.operator {
+    background: #ff9500;
+    color: #000;
+  }
+
+  button.clear {
+    background: #ff3b30;
+  }
+
+
+
+  button:active {
+    transform: scale(0.96);
+  }
+  
+  .title-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  margin-bottom: 12px;
+  width: 100%;
+}
+
+
+.title-container .stickman {
+  position: relative; 
+  top: 0;
+  right: 0;
+  transform: scale(0.7);
+}
+
+</style>
+</head>
+<body>
+
+<div class="calculator">
+
+<div class="title-container">
+  <div class="title">
+    <div class="hat"></div>
+    <span>K’s Calculator</span>
+  </div>
+
+  <div class="stickman">
+    <div class="hat"></div>
+    <div class="head"></div>
+    <div class="body"></div>
+    <div class="arms"></div>
+    <div class="shirt"></div>
+    <div class="legs">
+      <div class="leg left"></div>
+      <div class="leg right"></div>
+      <div class="fun-prop"></div>
+    </div>
+  </div>
+</div>
+
+
+
+
+  <div id="display" class="display">
+  <div id="line1" class="line1">0</div>
+  <div id="line2" class="line2"></div>
+</div>
+
+
+  <div class="buttons numpad">
+  <!-- Row 1 -->
+  <button onclick="appendValue('7')">7</button>
+  <button onclick="appendValue('8')">8</button>
+  <button onclick="appendValue('9')">9</button>
+  <button onclick="appendValue('/')" class="operator">÷</button>
+
+  <!-- Row 2 -->
+  <button onclick="appendValue('4')">4</button>
+  <button onclick="appendValue('5')">5</button>
+  <button onclick="appendValue('6')">6</button>
+  <button onclick="appendValue('*')" class="operator">×</button>
+
+  <!-- Row 3 -->
+  <button onclick="appendValue('1')">1</button>
+  <button onclick="appendValue('2')">2</button>
+  <button onclick="appendValue('3')">3</button>
+  <button onclick="appendValue('-')" class="operator">−</button>
+
+  <!-- Row 4 -->
+  <button onclick="appendValue('0')" class="zero">0</button>
+  <button onclick="appendValue('.')" >.</button>
+  <button class="equals" onclick="calculate()">=</button>
+  <button onclick="appendValue('+')" class="operator">+</button>
+
+  <!-- Row 5 -->
+  <button class="clear" onclick="clearDisplay()">C</button>
+</div>
+
+</div>
+
+<script>
+  const line1 = document.getElementById("line1");
+  const line2 = document.getElementById("line2");
+
+  let expression = "";
+
+  function appendValue(value) {
+    
+    if (line1.innerText === "K says") {
+      expression = "";
+      line1.innerText = "Enter calculation";
+      line2.innerText = "";
+    }
+
+    expression += value;
+    line1.innerText = "Enter calculation";
+    line2.innerText = expression;
+  }
+
+  function clearDisplay() {
+    expression = "";
+    line1.innerText = "Enter calculation";
+    line2.innerText = "";
+  }
+
+  function calculate() {
+    try {
+      const result = eval(expression);
+
+      const spokenExpression = expression
+        .replace(/\*/g, " times ")
+        .replace(/\//g, " divided by ")
+        .replace(/\+/g, " plus ")
+        .replace(/-/g, " minus ");
+
+      line1.innerText = "K says";
+      line2.innerText = `${expression.replace(/\*/g, "×")} = ${result+10}`;
+
+      speak(`K says ${spokenExpression} equals ${result+10}`);
+      expression = "";
+    } catch {
+      line1.innerText = "K says";
+      line2.innerText = "Something went wrong";
+      speak("K says something went wrong");
+    }
+  }
+
+ 
+  clearDisplay();
+</script>
+
+
+<script>
+  function speak(text) {
+    if (!window.speechSynthesis) return;
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 0.95;
+    utterance.pitch = 1;
+    utterance.volume = 1;
+
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utterance);
+  }
+</script>
+
+
+</body>
+</html>
