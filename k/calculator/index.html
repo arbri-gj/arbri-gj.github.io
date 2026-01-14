@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Mobile Calculator</title>
-<base href="/k/calculator/">
-
+<title>K's Calculator</title>
+<base href="/">
+<link rel="icon" href="favicon.png" type="image/x-icon">
 <style>
   /* Hide on non-mobile screens */
   @media (min-width: 769px) {
@@ -276,6 +276,8 @@ button.delete {
       <div class="leg right"></div>
     </div>
   </div>
+  
+
 </div>
 
 
@@ -347,52 +349,124 @@ button.delete {
   }
 
   function calculate() {
-    try {
-      const result = eval(expression);
+  try {
+    const result = eval(expression);
 
-      const spokenExpression = expression
-        .replace(/\*/g, " times ")
-        .replace(/\//g, " divided by ")
-        .replace(/\+/g, " plus ")
-        .replace(/-/g, " minus ");
+    const normalizedExpr = expression.replace(/\s+/g, '');
+    const specialCases = ['10*119', '119*10'];
 
-      line1.innerText = "K says";
-      line2.innerText = `${expression.replace(/\*/g, "×")} = ${result+10}`;
-
-      speak(`K says ${spokenExpression} equals ${result+10}`);
-      expression = "";
-    } catch {
-      line1.innerText = "K says";
-      line2.innerText = "Something went wrong";
-      speak("K says something went wrong");
+   
+    let addValue;
+    if (specialCases.includes(normalizedExpr)) {
+      addValue = 10; 
+    } else {
+      addValue = Math.floor(Math.random() * 100) + 1; 
     }
+
+    const finalResult = result + addValue;
+
+    const spokenExpression = expression
+      .replace(/\*/g, " times ")
+      .replace(/\//g, " divided by ")
+      .replace(/\+/g, " plus ")
+      .replace(/-/g, " minus ");
+
+    line1.innerText = "K says";
+    line2.innerText = `${expression.replace(/\*/g, "×")} = ${finalResult}`;
+
+    speak(`K says ${spokenExpression} equals ${finalResult}`);
+    expression = "";
+  } catch {
+    line1.innerText = "K says";
+    line2.innerText = "Something went wrong";
+    speak("K says something went wrong");
   }
+}
+
 
  
   clearDisplay();
   
   function deleteLast() {
-  // Remove last character from expression
+  
   expression = expression.slice(0, -1);
-  line2.innerText = expression || "";  // empty string if nothing left
+  line2.innerText = expression || "";  
 }
 
 </script>
 
 
 <script>
-  function speak(text) {
-    if (!window.speechSynthesis) return;
+let selectedVoice = null;
 
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 0.95;
-    utterance.pitch = 1;
-    utterance.volume = 1;
-
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(utterance);
+function selectMaleVoice() {
+  const voices = window.speechSynthesis.getVoices();
+  
+ 
+  selectedVoice = voices.find(voice => 
+    voice.name.includes("UK English Male") || 
+    voice.name.includes("David")
+  );
+  
+  
+  if (!selectedVoice) {
+    selectedVoice = voices.find(voice => 
+      /\bmale\b/i.test(voice.name) && !/Female/i.test(voice.name)
+    );
   }
+  
+
+  if (!selectedVoice) {
+    const maleNames = /daniel|david|thomas|james|fred|aaron|jorge|liam|tom|george|peter|paul|martin|oliver|nathan|ryan|albert|gordon/i;
+    selectedVoice = voices.find(voice => maleNames.test(voice.name));
+  }
+  
+ 
+  if (!selectedVoice) {
+    const femaleKeywords = /female|zira|samantha|karen|victoria|sara|kate|emily|alice|woman|girl|lady/i;
+    const nonFemaleVoices = voices.filter(voice => !femaleKeywords.test(voice.name));
+    if (nonFemaleVoices.length > 0) {
+      selectedVoice = nonFemaleVoices[0];
+    }
+  }
+  
+
+  if (!selectedVoice && voices.length > 0) {
+    selectedVoice = voices[0];
+  }
+}
+
+
+selectMaleVoice();
+
+
+window.speechSynthesis.onvoiceschanged = selectMaleVoice;
+
+function speak(text) {
+  if (!window.speechSynthesis) return;
+
+  
+  if (!selectedVoice) {
+    selectMaleVoice();
+  }
+
+  const utterance = new SpeechSynthesisUtterance(text);
+
+  utterance.rate = 0.7;   
+  utterance.pitch = 1;
+  utterance.volume = 1;
+
+  if (selectedVoice) {
+    utterance.voice = selectedVoice;
+  }
+
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utterance);
+}
 </script>
+
+
+
 
 
 </body>
