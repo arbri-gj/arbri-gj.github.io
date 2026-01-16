@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>K's pants!</title>
+<style>
+
+@media (min-width: 769px) {
+  body::before {
+    content: "📱 Mobile only guys";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-size: 1.2rem;
+    z-index: 9999;
+  }
+  body > * {
+    display: none;
+  }
+}
+
+:root {
+  --skin: #ffd1a3;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  margin: 0;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+  font-family: system-ui, -apple-system, sans-serif;
+  overflow: hidden;
+  padding: clamp(10px, 3vh, 20px);
+}
+
+.header {
+  text-align: center;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+h1 {
+  font-size: clamp(1.2rem, 4vw, 1.6rem);
+  margin: 0 0 clamp(4px, 1vh, 8px) 0;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.timer {
+  font-size: clamp(0.9rem, 3vw, 1.1rem);
+  color: #ffd700;
+  font-weight: 600;
+}
+
+.score {
+  font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+  opacity: 0.9;
+  margin-top: clamp(2px, 0.5vh, 4px);
+}
+
+.game-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+  min-height: 0;
+  padding: clamp(10px, 2vh, 20px) 0;
+}
+
+.game-area {
+  width: 100%;
+  max-width: min(400px, 90vw);
+  height: min(400px, 50vh);
+  aspect-ratio: 1;
+  position: relative;
+  background: rgba(255,255,255,0.1);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255,255,255,0.2);
+  overflow: hidden;
+}
+
+.person {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  transform: scale(clamp(0.6, 1vw + 0.5vh, 1.0));
+  transform-origin: center;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+  transition: left 0.3s ease-out, top 0.3s ease-out;
+  cursor: pointer;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(clamp(0.6, 1vw + 0.5vh, 1.0));
+}
+
+.person.running .leg {
+  animation: runLeg 0.3s infinite alternate;
+}
+
+.person.running .foot:first-child {
+  animation: runFoot 0.3s infinite alternate;
+}
+
+.person.running .foot:last-child {
+  animation: runFoot 0.3s infinite alternate-reverse;
+}
+
+@keyframes runLeg {
+  0% { transform: rotate(-10deg); }
+  100% { transform: rotate(10deg); }
+}
+
+@keyframes runFoot {
+  0% { transform: translateY(-3px) rotate(-5deg); }
+  100% { transform: translateY(2px) rotate(5deg); }
+}
+
+.hat {
+  width: 38px;
+  height: 18px;
+  background: #ff69b4;
+  border-radius: 8px 8px 3px 3px;
+  position: relative;
+  z-index: 3;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.hat::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: -6px;
+  width: 50px;
+  height: 7px;
+  background: #ff69b4;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.hair {
+  width: 40px;
+  height: 28px;
+  background: #3d2817;
+  border-radius: 50% 50% 0 0;
+  position: relative;
+  z-index: 1;
+  margin-top: -5px;
+}
+
+.head {
+  width: 36px;
+  height: 40px;
+  background: var(--skin);
+  border-radius: 50% 50% 45% 45%;
+  margin-top: -18px;
+  position: relative;
+  z-index: 2;
+}
+
+.eyes {
+  display: flex;
+  gap: 10px;
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.eye {
+  width: 6px;
+  height: 6px;
+  background: #2c1810;
+  border-radius: 50%;
+}
+
+.smile {
+  position: absolute;
+  top: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 8px;
+  border: 2px solid #2c1810;
+  border-top: none;
+  border-radius: 0 0 16px 16px;
+  transition: all 0.3s ease;
+}
+
+.person.face-laugh .smile {
+  width: 20px;
+  height: 10px;
+  border-width: 3px;
+}
+
+.person.face-tongue .smile {
+  width: 18px;
+  height: 12px;
+}
+
+.person.face-tongue .smile::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  background: #ff6b9d;
+  border-radius: 50% 50% 50% 50%;
+}
+
+.person.face-wink .eye:first-child {
+  height: 2px;
+  border-radius: 0;
+}
+
+.person.face-smirk .smile {
+  width: 14px;
+  transform: translateX(-50%) rotate(-15deg);
+}
+
+.person.face-curse .smile {
+  width: 15px;
+  height: 7px;
+  border-radius: 13px 13px 0 0;
+  border-bottom: 0;
+  border-top: none;
+  top: 28px;
+}
+
+.person.face-curse .eye {
+  width: 8px;
+  height: 4px;
+  border-radius: 0;
+  transform: rotate(-15deg);
+}
+
+.person.face-curse .eye:last-child {
+  transform: rotate(15deg);
+}
+
+.person.face-curse::before {
+  content: "🤬";
+  position: absolute;
+  top: -25px;
+  right: -30px;
+  font-size: 24px;
+  animation: curseFloat 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes curseFloat {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(-5px); }
+}
+
+.torso {
+  width: 44px;
+  height: 50px;
+  background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+  border-radius: 12px 12px 8px 8px;
+  margin-top: 2px;
+  position: relative;
+  box-shadow: inset -2px -2px 8px rgba(0,0,0,0.2);
+}
+
+.arms {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: space-between;
+  width: 70px;
+}
+
+.arm {
+  width: 8px;
+  height: 36px;
+  background: var(--skin);
+  border-radius: 8px;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+}
+
+.hand {
+  width: 10px;
+  height: 10px;
+  background: var(--skin);
+  border-radius: 50%;
+  margin-top: -2px;
+  margin-left: -1px;
+  box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+.legs {
+  width: 44px;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  position: relative;
+  margin-top: 0;
+}
+
+.leg {
+  width: 18px;
+  height: 48px;
+  background: var(--skin);
+  border-radius: 8px;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  transform-origin: top center;
+}
+
+.feet {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+}
+
+.foot {
+  width: 20px;
+  height: 8px;
+  background: #654321;
+  border-radius: 4px 4px 0 0;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+  transform-origin: center top;
+}
+
+.pants {
+  width: clamp(40px, 10vw, 50px);
+  height: clamp(40px, 10vw, 50px);
+  position: fixed;
+  bottom: clamp(60px, 12vh, 80px);
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: grab;
+  touch-action: none;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  z-index: 100;
+}
+
+.pants-visual {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #2d5dd7 0%, #1e3a8a 100%);
+  border-radius: 8px 8px 12px 12px;
+  position: relative;
+  box-shadow: 0 6px 16px rgba(45, 93, 215, 0.6);
+  border: 3px solid rgba(255,255,255,0.3);
+}
+
+.pants-visual::before {
+  content: "";
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 65%;
+  background: rgba(0,0,0,0.2);
+}
+
+.pants-visual::after {
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  height: 6px;
+  background: #8b7355;
+  border-radius: 2px;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.pants.dragging {
+  cursor: grabbing;
+  transform: translateX(-50%) scale(1.15) rotate(8deg);
+  box-shadow: 0 10px 25px rgba(45, 93, 215, 0.7);
+  z-index: 1000;
+}
+
+.person.dressed .legs .pants-worn {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 44px;
+  height: 48px;
+  background: linear-gradient(180deg, #2d5dd7 0%, #1e3a8a 100%);
+  border-radius: 8px 8px 12px 12px;
+  z-index: 3;
+  box-shadow: inset -1px -1px 3px rgba(0,0,0,0.2);
+}
+
+.person.dressed .legs .pants-worn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 100%;
+  background: rgba(0,0,0,0.15);
+}
+
+#msg {
+  text-align: center;
+  font-size: clamp(1rem, 3vw, 1.2rem);
+  font-weight: 600;
+  min-height: clamp(30px, 5vh, 40px);
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.footer {
+  width: 100%;
+  text-align: center;
+  padding-bottom: clamp(5px, 1vh, 10px);
+  flex-shrink: 0;
+}
+
+.btn {
+  background: rgba(255,255,255,0.2);
+  border: 2px solid rgba(255,255,255,0.4);
+  color: white;
+  padding: clamp(10px, 2vh, 12px) clamp(20px, 5vw, 28px);
+  border-radius: 25px;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
+  font-weight: 600;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.btn:active {
+  transform: scale(0.95);
+  background: rgba(255,255,255,0.3);
+}
+
+.celebration {
+  position: fixed;
+  font-size: clamp(2rem, 6vw, 3rem);
+  pointer-events: none;
+  animation: celebrate 1s ease-out forwards;
+  z-index: 9999;
+}
+
+@keyframes celebrate {
+  0% {
+    transform: translateY(0) scale(0.5);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100px) scale(1.5);
+    opacity: 0;
+  }
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>Put pants on K 🏃‍♂️👖</h1>
+  <div class="timer" id="timer">Time: 0.0s</div>
+  <div class="score" id="score">Best: --</div>
+</div>
+
+<div class="game-container">
+  <div class="game-area" id="gameArea">
+    <div class="person" id="person">
+      <div class="hat"></div>
+      <div class="hair"></div>
+      <div class="head">
+        <div class="eyes">
+          <div class="eye"></div>
+          <div class="eye"></div>
+        </div>
+        <div class="smile"></div>
+      </div>
+      <div class="torso">
+        <div class="arms">
+          <div class="arm-left">
+            <div class="arm"></div>
+            <div class="hand"></div>
+          </div>
+          <div class="arm-right">
+            <div class="arm"></div>
+            <div class="hand"></div>
+          </div>
+        </div>
+      </div>
+      <div class="legs" id="dropZone">
+        <div class="leg"></div>
+        <div class="leg"></div>
+      </div>
+      <div class="feet">
+        <div class="foot"></div>
+        <div class="foot"></div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="pants" id="pants">
+    <div class="pants-visual"></div>
+  </div>
+</div>
+
+<div class="footer">
+  <div id="msg">Put the pants on K. He does not like them</div>
+  <button class="btn" id="restartBtn" style="display: none;">Play again MF</button>
+</div>
+
+<script>
+const person = document.getElementById("person");
+const gameArea = document.getElementById("gameArea");
+const pants = document.getElementById("pants");
+const dropZone = document.getElementById("dropZone");
+const msg = document.getElementById("msg");
+const timerEl = document.getElementById("timer");
+const scoreEl = document.getElementById("score");
+const restartBtn = document.getElementById("restartBtn");
+
+let isDragging = false;
+let offsetX = 0, offsetY = 0;
+let startTime = Date.now();
+let timerInterval;
+let bestTime = localStorage.getItem("bestTime");
+let moveInterval;
+let faceInterval;
+let gameWon = false;
+let lastEvadeTime = 0;
+let personStartedMoving = false;
+
+if (bestTime) {
+  scoreEl.textContent = `Best: ${parseFloat(bestTime).toFixed(1)}s`;
+}
+
+function movePerson() {
+  if (gameWon || !personStartedMoving) return;
+  
+  const areaRect = gameArea.getBoundingClientRect();
+  const personWidth = 80;
+  const personHeight = 180;
+  
+  const maxX = areaRect.width - personWidth;
+  const maxY = areaRect.height - personHeight;
+  
+  const newX = Math.random() * maxX;
+  const newY = Math.random() * maxY;
+  
+  person.style.left = newX + "px";
+  person.style.top = newY + "px";
+  person.style.transform = `scale(clamp(0.6, 1vw + 0.5vh, 1.0))`;
+}
+
+function changeFace() {
+  if (gameWon) return;
+  
+  const faces = ['face-laugh', 'face-tongue', 'face-wink', 'face-smirk', ''];
+  const randomFace = faces[Math.floor(Math.random() * faces.length)];
+  
+  person.classList.remove('face-laugh', 'face-tongue', 'face-wink', 'face-smirk', 'face-curse');
+  
+  if (randomFace) {
+    person.classList.add(randomFace);
+  }
+}
+
+function checkProximityAndEvade() {
+  if (gameWon) return;
+  
+  const elapsed = (Date.now() - startTime) / 1000;
+  const now = Date.now();
+  
+  if (now - lastEvadeTime < 150) return;
+
+  const personRect = person.getBoundingClientRect();
+  const pantsRect = pants.getBoundingClientRect();
+  
+  const personCenterX = personRect.left + personRect.width / 2;
+  const personCenterY = personRect.top + personRect.height / 2;
+  const pantsCenterX = pantsRect.left + pantsRect.width / 2;
+  const pantsCenterY = pantsRect.top + pantsRect.height / 2;
+  
+  const distance = Math.sqrt(
+    Math.pow(personCenterX - pantsCenterX, 2) + 
+    Math.pow(personCenterY - pantsCenterY, 2)
+  );
+  
+  if (distance < 200 && !personStartedMoving) {
+    personStartedMoving = true;
+    person.classList.add('running');
+    moveInterval = setInterval(movePerson, 800);
+    faceInterval = setInterval(changeFace, 400);
+    movePerson();
+  }
+  
+  if (personStartedMoving && elapsed < 60 && distance < 150) {
+    lastEvadeTime = now;
+    
+    const areaRect = gameArea.getBoundingClientRect();
+    const personWidth = 80;
+    const personHeight = 180;
+    
+    const maxX = areaRect.width - personWidth;
+    const maxY = areaRect.height - personHeight;
+    
+    const currentX = personRect.left - areaRect.left;
+    const currentY = personRect.top - areaRect.top;
+    
+    let directionX = personCenterX - pantsCenterX;
+    let directionY = personCenterY - pantsCenterY;
+    
+    const magnitude = Math.sqrt(directionX * directionX + directionY * directionY);
+    directionX = directionX / magnitude;
+    directionY = directionY / magnitude;
+    
+    const escapeDistance = 150;
+    
+    let newX = currentX + directionX * escapeDistance;
+    let newY = currentY + directionY * escapeDistance;
+    
+    if (newX < 0 || newX > maxX || newY < 0 || newY > maxY) {
+      const altDirections = [
+        { x: directionY, y: -directionX },
+        { x: -directionY, y: directionX },
+        { x: -directionX, y: -directionY }
+      ];
+      
+      for (let alt of altDirections) {
+        newX = currentX + alt.x * escapeDistance;
+        newY = currentY + alt.y * escapeDistance;
+        
+        if (newX >= 0 && newX <= maxX && newY >= 0 && newY <= maxY) {
+          break;
+        }
+      }
+    }
+    
+    newX = Math.max(0, Math.min(maxX, newX));
+    newY = Math.max(0, Math.min(maxY, newY));
+    
+    person.style.transition = "left 0.25s ease-out, top 0.25s ease-out";
+    person.style.left = newX + "px";
+    person.style.top = newY + "px";
+    person.style.transform = `scale(clamp(0.6, 1vw + 0.5vh, 1.0))`;
+    
+    person.classList.remove('face-laugh', 'face-tongue', 'face-wink', 'face-smirk', 'face-curse');
+    person.classList.add('face-tongue');
+  }
+}
+
+changeFace();
+
+setInterval(checkProximityAndEvade, 50);
+
+timerInterval = setInterval(() => {
+  const elapsed = (Date.now() - startTime) / 1000;
+  timerEl.textContent = `Time: ${elapsed.toFixed(1)}s`;
+}, 100);
+
+pants.addEventListener("touchstart", handleStart, { passive: false });
+pants.addEventListener("touchmove", handleMove, { passive: false });
+pants.addEventListener("touchend", handleEnd, { passive: false });
+
+pants.addEventListener("mousedown", handleStart);
+document.addEventListener("mousemove", handleMove);
+document.addEventListener("mouseup", handleEnd);
+
+function handleStart(e) {
+  if (gameWon) return;
+  
+  e.preventDefault();
+  isDragging = true;
+  pants.classList.add("dragging");
+  
+  const touch = e.touches ? e.touches[0] : e;
+  const rect = pants.getBoundingClientRect();
+  
+  offsetX = touch.clientX - rect.left;
+  offsetY = touch.clientY - rect.top;
+}
+
+function handleMove(e) {
+  if (!isDragging) return;
+  
+  e.preventDefault();
+  const touch = e.touches ? e.touches[0] : e;
+  
+  const currentX = touch.clientX - offsetX;
+  const currentY = touch.clientY - offsetY;
+  
+  pants.style.left = currentX + "px";
+  pants.style.top = currentY + "px";
+  pants.style.transform = "scale(1.15) rotate(8deg)";
+}
+
+function handleEnd(e) {
+  if (!isDragging) return;
+  
+  isDragging = false;
+  pants.classList.remove("dragging");
+  
+  const elapsed = (Date.now() - startTime) / 1000;
+  
+  if (elapsed < 10) {
+    pants.style.transition = "all 0.3s ease";
+    pants.style.left = "50%";
+    pants.style.bottom = "80px";
+    pants.style.top = "auto";
+    pants.style.transform = "translateX(-50%)";
+    
+    msg.textContent = `Good try, but you missed MF`;
+    
+    setTimeout(() => {
+      pants.style.transition = "";
+      msg.textContent = "Put the pants on K. He does not like them";
+    }, 300);
+    return;
+  }
+  
+  const personRect = person.getBoundingClientRect();
+  const pantsRect = pants.getBoundingClientRect();
+  
+  const isOver = (
+    pantsRect.left < personRect.right &&
+    pantsRect.right > personRect.left &&
+    pantsRect.top < personRect.bottom &&
+    pantsRect.bottom > personRect.top
+  );
+  
+  if (isOver) {
+    gameWon = true;
+    clearInterval(timerInterval);
+    clearInterval(moveInterval);
+    clearInterval(faceInterval);
+    
+    const finalTime = ((Date.now() - startTime) / 1000).toFixed(1);
+    
+    pants.style.display = "none";
+    
+    const wornpants = document.createElement("div");
+    wornpants.className = "pants-worn";
+    dropZone.appendChild(wornpants);
+    person.classList.add("dressed");
+    person.classList.remove("running");
+    
+    person.classList.remove('face-laugh', 'face-tongue', 'face-wink', 'face-smirk');
+    person.classList.add('face-curse');
+    
+    msg.textContent = `OMG... K has pants on now, again 🏆✨`;
+    restartBtn.style.display = "block";
+    
+    if (!bestTime || parseFloat(finalTime) < parseFloat(bestTime)) {
+      bestTime = finalTime;
+      localStorage.setItem("bestTime", bestTime);
+      scoreEl.textContent = `Best: ${bestTime}s 🏆`;
+      msg.textContent = `OMG... K has pants on now 🏆✨`;
+    }
+    
+    celebrate();
+  } else {
+    pants.style.transition = "all 0.3s ease";
+    pants.style.left = "50%";
+    pants.style.bottom = "80px";
+    pants.style.top = "auto";
+    pants.style.transform = "translateX(-50%)";
+    
+    setTimeout(() => {
+      pants.style.transition = "";
+    }, 300);
+  }
+}
+
+function celebrate() {
+  const emojis = ["🎉", "✨", "🎊", "⭐", "🌟", "👏"];
+  for (let i = 0; i < 10; i++) {
+    setTimeout(() => {
+      const emoji = document.createElement("div");
+      emoji.className = "celebration";
+      emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      emoji.style.left = Math.random() * window.innerWidth + "px";
+      emoji.style.top = window.innerHeight / 2 + "px";
+      document.body.appendChild(emoji);
+      setTimeout(() => emoji.remove(), 1000);
+    }, i * 100);
+  }
+}
+
+restartBtn.addEventListener("click", () => {
+  location.reload();
+});
+</script>
+</body>
+</html>
