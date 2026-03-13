@@ -32,7 +32,7 @@
   "notDeleted": "Not deleted",
   "exclude": "Does not contain keywords",
   "filter": "Filter",
-  "onlyNewJobs": "Show only those added with last update",
+  "onlyNewJobs": "Only those added with last update",
   "newBruto": "New",
 
   "newIdeaSection": {
