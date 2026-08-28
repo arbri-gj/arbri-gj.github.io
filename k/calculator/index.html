@@ -253,6 +253,18 @@ button.delete {
   transform: scale(0.7);
 }
 
+.analytics-notice {
+  position: fixed;
+  bottom: 8px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  color: #666;
+  font-size: 0.7rem;
+  line-height: 1.3;
+  pointer-events: none;
+}
+
 </style>
 </head>
 <body>
@@ -467,7 +479,21 @@ function speak(text) {
 
 
 
-
+<script>
+  fetch("https://visitor-tracker.arbri-gjylbegaj.workers.dev", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      page: window.location.pathname
+    })
+  }).catch(() => {});
+</script>
+<div hidden=true class="analytics-notice">
+  Visitor location data is recorded automatically for analytics.
+</div>
 
 </body>
+
 </html>
