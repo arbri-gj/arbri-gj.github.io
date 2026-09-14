@@ -1,0 +1,278 @@
+'==========================================================
+' Helper: make a string safe to use as a sheet name or file name
+'==========================================================
+Function CleanName(ByVal s As String) As String
+    Dim badChars As String
+    Dim i As Long
+    badChars = "\/:*?""<>|[]"
+    For i = 1 To Len(badChars)
+        s = Replace(s, Mid(badChars, i, 1), "_")
+    Next i
+    s = Trim(s)
+    If Len(s) = 0 Then s = "Sheet"
+    If Len(s) > 31 Then s = Left(s, 31)   ' sheet name limit
+    CleanName = s
+End Function
+
+Sub GeneratePackingList()
+
+    Dim ws As Worksheet
+    Set ws = ThisWorkbook.Sheets("Template")
+
+    Const OUT_START_ROW As Long = 2
+    Const RAW_START_ROW As Long = 8
+
+    Dim poVal As String, custVal As String, toVal As String
+    poVal = ws.Range("N2").Value
+    custVal = ws.Range("N3").Value
+    toVal = ws.Range("N4").Value
+
+    If Trim(poVal) = "" Then
+        MsgBox "Please enter a PO number in N2 before generating.", vbExclamation
+        Exit Sub
+    End If
+
+    ' Clear any previously generated output rows (A:H) on Template
+    ws.Range("A" & OUT_START_ROW & ":H10000").ClearContents
+
+    ' Find the last row of raw data (based on column M)
+    Dim lastRawRow As Long
+    lastRawRow = ws.Cells(ws.Rows.Count, "M").End(xlUp).Row
+
+    If lastRawRow < RAW_START_ROW Then
+        MsgBox "No raw data found starting at M8.", vbExclamation
+        Exit Sub
+    End If
+
+    ' First pass: total number of output rows (= sum of Cartons)
+    Dim totalPages As Long
+    Dim r As Long
+    totalPages = 0
+    For r = RAW_START_ROW To lastRawRow
+        totalPages = totalPages + ws.Cells(r, "M").Value
+    Next r
+
+    ' Second pass: write one output row per carton
+    Dim outRow As Long, pageCounter As Long
+    outRow = OUT_START_ROW
+    pageCounter = 0
+
+    Dim cartons As Long, styleVal As String, pieces As Double
+    Dim colorVal As String, deptVal As String, unitCS As Double
+    Dim c As Long
+
+    For r = RAW_START_ROW To lastRawRow
+        cartons = ws.Cells(r, "M").Value
+        styleVal = ws.Cells(r, "N").Value
+        pieces = ws.Cells(r, "O").Value
+        colorVal = ws.Cells(r, "P").Value
+        deptVal = ws.Cells(r, "Q").Value
+
+        If cartons > 0 Then
+            unitCS = pieces / cartons
+        Else
+            unitCS = 0
+        End If
+
+        For c = 1 To cartons
+            pageCounter = pageCounter + 1
+            ws.Cells(outRow, "A").Value = custVal
+            ws.Cells(outRow, "B").Value = toVal
+            ws.Cells(outRow, "C").Value = poVal
+            ws.Cells(outRow, "D").Value = styleVal
+            ws.Cells(outRow, "E").Value = colorVal
+            ws.Cells(outRow, "F").Value = deptVal
+            ws.Cells(outRow, "G").Value = unitCS
+            ws.Cells(outRow, "H").Value = "Page " & pageCounter & " of " & totalPages
+            outRow = outRow + 1
+        Next c
+    Next r
+
+    ' -------- Also copy the result to a sheet named after the PO --------
+    Dim poSheetName As String
+    poSheetName = CleanName(poVal)
+
+    Dim poWs As Worksheet
+    On Error Resume Next
+    Set poWs = ThisWorkbook.Sheets(poSheetName)
+    On Error GoTo 0
+
+    Application.DisplayAlerts = False
+    If Not poWs Is Nothing Then poWs.Delete
+    Application.DisplayAlerts = True
+
+    Set poWs = ThisWorkbook.Sheets.Add(After:=ThisWorkbook.Sheets(ThisWorkbook.Sheets.Count))
+    poWs.Name = poSheetName
+
+    ws.Range("A1:H" & (outRow - 1)).Copy
+    poWs.Range("A1").PasteSpecial xlPasteValues
+    poWs.Range("A1").PasteSpecial xlPasteFormats
+    Application.CutCopyMode = False
+    poWs.Columns("A:H").AutoFit
+
+    MsgBox pageCounter & " rows generated." & vbCrLf & _
+           "Copied to sheet """ & poSheetName & """.", vbInformation
+
+End Sub
+
+
+Sub ExportSheetsToFiles()
+
+    Dim fd As FileDialog
+    Set fd = Application.FileDialog(msoFileDialogFolderPicker)
+    fd.Title = "Select folder to save workbooks"
+
+    If fd.Show <> -1 Then
+        MsgBox "No folder selected. Cancelled.", vbExclamation
+        Exit Sub
+    End If
+
+    Dim folderPath As String
+    folderPath = fd.SelectedItems(1)
+    If Right(folderPath, 1) <> "\" Then folderPath = folderPath & "\"
+
+    Dim ws As Worksheet
+    Dim newWb As Workbook
+    Dim exportedCount As Long
+    exportedCount = 0
+
+    Application.ScreenUpdating = False
+    Application.DisplayAlerts = False
+
+    For Each ws In ThisWorkbook.Worksheets
+        If StrComp(ws.Name, "Template", vbTextCompare) <> 0 Then
+            ws.Copy   ' copying with no Before/After sends it to a brand-new workbook
+            Set newWb = ActiveWorkbook
+
+            Dim fileName As String
+            fileName = CleanName(ws.Name)
+
+            newWb.SaveAs fileName:=folderPath & fileName & ".xlsx", FileFormat:=xlOpenXMLWorkbook
+            newWb.Close SaveChanges:=False
+
+            exportedCount = exportedCount + 1
+        End If
+    Next ws
+
+    Application.DisplayAlerts = True
+    Application.ScreenUpdating = True
+
+    MsgBox exportedCount & " workbook(s) exported to:" & vbCrLf & folderPath, vbInformation
+
+End Sub
+
+Sub JoinSelectedSheets()
+
+    Dim ws As Worksheet
+    Dim joinWs As Worksheet
+    Dim selectedSheets As String
+    Dim sheetList As String
+    Dim i As Long
+    Dim choice As String
+    Dim arrSheets As Variant
+    Dim nextRow As Long
+    Dim lastRow As Long
+    Dim lastCol As Long
+    Dim firstSheet As Boolean
+    
+    ' Build list of available sheets
+    For i = 1 To ThisWorkbook.Worksheets.Count
+        If ThisWorkbook.Worksheets(i).Name <> "Template" Then
+            sheetList = sheetList & i & " - " & ThisWorkbook.Worksheets(i).Name & vbCrLf
+        End If
+    Next i
+    
+    If sheetList = "" Then
+        MsgBox "No sheets available to join.", vbExclamation
+        Exit Sub
+    End If
+    
+    ' Ask user which sheets to join
+    choice = InputBox( _
+        "Enter the sheet numbers you want to join, separated by commas." & _
+        vbCrLf & vbCrLf & _
+        sheetList & vbCrLf & _
+        "Example: 2,4,5", _
+        "Select Sheets to Join")
+    
+    If Trim(choice) = "" Then Exit Sub
+    
+    arrSheets = Split(choice, ",")
+    
+    Application.ScreenUpdating = False
+    Application.DisplayAlerts = False
+    
+    ' Delete existing Joined sheet if it exists
+    On Error Resume Next
+    ThisWorkbook.Worksheets("Joined").Delete
+    On Error GoTo 0
+    
+    ' Create new Joined sheet
+    Set joinWs = ThisWorkbook.Worksheets.Add( _
+        After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
+    
+    joinWs.Name = "Joined"
+    
+    nextRow = 1
+    firstSheet = True
+    
+    ' Loop through selected sheets
+    For i = LBound(arrSheets) To UBound(arrSheets)
+        
+        If IsNumeric(Trim(arrSheets(i))) Then
+            
+            Dim sheetNumber As Long
+            sheetNumber = CLng(Trim(arrSheets(i)))
+            
+            If sheetNumber >= 1 And sheetNumber <= ThisWorkbook.Worksheets.Count Then
+                
+                Set ws = ThisWorkbook.Worksheets(sheetNumber)
+                
+                ' Don't allow Template or Joined
+                If ws.Name <> "Template" And ws.Name <> "Joined" Then
+                    
+                    lastRow = ws.Cells.Find(What:="*", _
+                                            SearchOrder:=xlByRows, _
+                                            SearchDirection:=xlPrevious).Row
+                    
+                    lastCol = ws.Cells.Find(What:="*", _
+                                            SearchOrder:=xlByColumns, _
+                                            SearchDirection:=xlPrevious).Column
+                    
+                    If firstSheet Then
+                        ' Copy everything including headers
+                        ws.Range(ws.Cells(1, 1), ws.Cells(lastRow, lastCol)).Copy
+                        joinWs.Cells(nextRow, 1).PasteSpecial xlPasteValues
+                        joinWs.Cells(nextRow, 1).PasteSpecial xlPasteFormats
+                        
+                        nextRow = nextRow + lastRow
+                        firstSheet = False
+                    Else
+                        ' Copy data WITHOUT header row
+                        If lastRow > 1 Then
+                            ws.Range(ws.Cells(2, 1), _
+                                     ws.Cells(lastRow, lastCol)).Copy
+                            
+                            joinWs.Cells(nextRow, 1).PasteSpecial xlPasteValues
+                            joinWs.Cells(nextRow, 1).PasteSpecial xlPasteFormats
+                            
+                            nextRow = nextRow + (lastRow - 1)
+                        End If
+                    End If
+                    
+                End If
+            End If
+        End If
+        
+    Next i
+    
+    Application.CutCopyMode = False
+    joinWs.Columns.AutoFit
+    
+    Application.DisplayAlerts = True
+    Application.ScreenUpdating = True
+    
+    MsgBox "Selected sheets have been joined into the 'Joined' sheet.", _
+           vbInformation
+
+End Sub
