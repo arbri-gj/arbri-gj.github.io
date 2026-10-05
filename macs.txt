@@ -276,3 +276,217 @@ Sub JoinSelectedSheets()
            vbInformation
 
 End Sub
+
+
+Sub GeneratePackingList()
+
+    Dim ws As Worksheet
+    Dim outWs As Worksheet
+
+    Dim lastRow As Long
+    Dim r As Long
+    Dim outRow As Long
+
+    Dim currentPO As String
+    Dim custVal As String
+    Dim addressVal As String
+
+    Dim cartons As Long
+    Dim pieces As Double
+    Dim unitCS As Double
+
+    Dim styleVal As String
+    Dim colorVal As String
+    Dim deptVal As String
+
+    Dim pageCounter As Long
+    Dim totalPages As Long
+
+    Dim poTotals As Object
+    Dim sheetName As String
+
+    '--------------------------------------------------
+    ' INPUT SHEET
+    '--------------------------------------------------
+    Set ws = ThisWorkbook.Sheets("Template")
+
+    '--------------------------------------------------
+    ' DELETE OLD OUTPUT SHEET IF IT EXISTS
+    '--------------------------------------------------
+    sheetName = "Packing List"
+
+    Application.DisplayAlerts = False
+
+    On Error Resume Next
+    ThisWorkbook.Sheets(sheetName).Delete
+    On Error GoTo 0
+
+    Application.DisplayAlerts = True
+
+    '--------------------------------------------------
+    ' CREATE ONE NEW OUTPUT SHEET
+    '--------------------------------------------------
+    Set outWs = ThisWorkbook.Sheets.Add(After:= _
+                    ThisWorkbook.Sheets(ThisWorkbook.Sheets.Count))
+
+    outWs.Name = sheetName
+
+    '--------------------------------------------------
+    ' FIND LAST INPUT ROW
+    '--------------------------------------------------
+    lastRow = ws.Cells(ws.Rows.Count, "M").End(xlUp).Row
+
+    '--------------------------------------------------
+    ' DICTIONARY FOR TOTAL CARTONS PER PO
+    '--------------------------------------------------
+    Set poTotals = CreateObject("Scripting.Dictionary")
+
+    '--------------------------------------------------
+    ' FIRST PASS
+    ' Calculate total cartons for each PO
+    '--------------------------------------------------
+    currentPO = ""
+
+    For r = 8 To lastRow
+
+        If UCase(Trim(CStr(ws.Cells(r, "M").Value))) = "NEW" Then
+
+            currentPO = Trim(CStr(ws.Cells(r, "N").Value))
+
+            If currentPO <> "" Then
+
+                If Not poTotals.Exists(currentPO) Then
+                    poTotals.Add currentPO, 0
+                End If
+
+            End If
+
+        Else
+
+            If currentPO <> "" Then
+
+                If IsNumeric(ws.Cells(r, "M").Value) Then
+
+                    cartons = CLng(ws.Cells(r, "M").Value)
+
+                    If cartons > 0 Then
+                        poTotals(currentPO) = _
+                            poTotals(currentPO) + cartons
+                    End If
+
+                End If
+
+            End If
+
+        End If
+
+    Next r
+
+    '--------------------------------------------------
+    ' SECOND PASS
+    ' CREATE OUTPUT
+    '--------------------------------------------------
+    outRow = 1
+    currentPO = ""
+    pageCounter = 0
+
+    For r = 8 To lastRow
+
+        '----------------------------------------------
+        ' NEW PO
+        '----------------------------------------------
+        If UCase(Trim(CStr(ws.Cells(r, "M").Value))) = "NEW" Then
+
+            currentPO = Trim(CStr(ws.Cells(r, "N").Value))
+            custVal = Trim(CStr(ws.Cells(r, "O").Value))
+            addressVal = Trim(CStr(ws.Cells(r, "P").Value))
+
+            ' Reset page count for new PO
+            pageCounter = 0
+
+        '----------------------------------------------
+        ' NORMAL DATA ROW
+        '----------------------------------------------
+        ElseIf currentPO <> "" Then
+
+            If IsNumeric(ws.Cells(r, "M").Value) Then
+                cartons = CLng(ws.Cells(r, "M").Value)
+            Else
+                cartons = 0
+            End If
+
+            If cartons > 0 Then
+
+                styleVal = ws.Cells(r, "N").Value
+                pieces = Val(ws.Cells(r, "O").Value)
+                colorVal = ws.Cells(r, "P").Value
+                deptVal = ws.Cells(r, "Q").Value
+
+                ' Pieces per carton
+                unitCS = pieces / cartons
+
+                ' Total pages for this PO
+                If poTotals.Exists(currentPO) Then
+                    totalPages = poTotals(currentPO)
+                Else
+                    totalPages = 0
+                End If
+
+                '--------------------------------------
+                ' ONE ROW PER CARTON
+                '--------------------------------------
+                Dim i As Long
+
+                For i = 1 To cartons
+
+                    pageCounter = pageCounter + 1
+
+                    outWs.Cells(outRow, "A").Value = custVal
+                    outWs.Cells(outRow, "B").Value = addressVal
+                    outWs.Cells(outRow, "C").Value = currentPO
+                    outWs.Cells(outRow, "D").Value = styleVal
+                    outWs.Cells(outRow, "E").Value = colorVal
+                    outWs.Cells(outRow, "F").Value = deptVal
+                    outWs.Cells(outRow, "G").Value = unitCS
+                    outWs.Cells(outRow, "H").Value = _
+                        "Page " & pageCounter & " of " & totalPages
+
+                    outRow = outRow + 1
+
+                Next i
+
+            End If
+
+        End If
+
+    Next r
+
+    '--------------------------------------------------
+    ' FORMAT OUTPUT
+    '--------------------------------------------------
+    With outWs
+
+        .Columns("A:H").AutoFit
+
+        .Rows("1:" & outRow - 1).VerticalAlignment = xlCenter
+
+    End With
+
+    '--------------------------------------------------
+    ' FINISHED
+	' Row 8:   M = New     N = PO1001    O = Customer A    P = Address A
+' Row 9:   M = 5       N = Style 123 O = 100           P = Red       Q = Men
+' Row 10:  M = 3       N = Style 456 O = 60            P = Blue      Q = Women
+' Row 11:  M = 2       N = Style 789 O = 40            P = Black     Q = Kids
+
+' Row 12:  M = New     N = PO1002    O = Customer B    P = Address B
+' Row 13:  M = 4       N = Style 111 O = 80            P = White     Q = Men
+' Row 14:  M = 2       N = Style 222 O = 40            P = Green     Q = Women
+    '--------------------------------------------------
+    MsgBox "Packing List created successfully." & vbCrLf & _
+           "Template was left unchanged." & vbCrLf & _
+           "All POs are in one sheet: " & sheetName, _
+           vbInformation
+
+End Sub
+
