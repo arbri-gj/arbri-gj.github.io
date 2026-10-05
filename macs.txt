@@ -44,7 +44,7 @@ Sub GeneratePackingList()
         Exit Sub
     End If
 
-    ' First pass: total number of output rows (= sum of Cartons)
+    
     Dim totalPages As Long
     Dim r As Long
     totalPages = 0
@@ -57,24 +57,24 @@ Sub GeneratePackingList()
     outRow = OUT_START_ROW
     pageCounter = 0
 
-    Dim cartons As Long, styleVal As String, pieces As Double
+    Dim cartss As Long, styleVal As String, pieces As Double
     Dim colorVal As String, deptVal As String, unitCS As Double
     Dim c As Long
 
     For r = RAW_START_ROW To lastRawRow
-        cartons = ws.Cells(r, "M").Value
+        cartss = ws.Cells(r, "M").Value
         styleVal = ws.Cells(r, "N").Value
         pieces = ws.Cells(r, "O").Value
         colorVal = ws.Cells(r, "P").Value
         deptVal = ws.Cells(r, "Q").Value
 
-        If cartons > 0 Then
-            unitCS = pieces / cartons
+        If cartss > 0 Then
+            unitCS = pieces / cartss
         Else
             unitCS = 0
         End If
 
-        For c = 1 To cartons
+        For c = 1 To cartss
             pageCounter = pageCounter + 1
             ws.Cells(outRow, "A").Value = custVal
             ws.Cells(outRow, "B").Value = toVal
@@ -291,7 +291,7 @@ Sub GeneratePackingList()
     Dim custVal As String
     Dim addressVal As String
 
-    Dim cartons As Long
+    Dim cartss As Long
     Dim pieces As Double
     Dim unitCS As Double
 
@@ -305,14 +305,10 @@ Sub GeneratePackingList()
     Dim poTotals As Object
     Dim sheetName As String
 
-    '--------------------------------------------------
-    ' INPUT SHEET
-    '--------------------------------------------------
+
     Set ws = ThisWorkbook.Sheets("Template")
 
-    '--------------------------------------------------
-    ' DELETE OLD OUTPUT SHEET IF IT EXISTS
-    '--------------------------------------------------
+
     sheetName = "Packing List"
 
     Application.DisplayAlerts = False
@@ -323,28 +319,19 @@ Sub GeneratePackingList()
 
     Application.DisplayAlerts = True
 
-    '--------------------------------------------------
-    ' CREATE ONE NEW OUTPUT SHEET
-    '--------------------------------------------------
+
     Set outWs = ThisWorkbook.Sheets.Add(After:= _
                     ThisWorkbook.Sheets(ThisWorkbook.Sheets.Count))
 
     outWs.Name = sheetName
 
-    '--------------------------------------------------
-    ' FIND LAST INPUT ROW
-    '--------------------------------------------------
+
     lastRow = ws.Cells(ws.Rows.Count, "M").End(xlUp).Row
 
-    '--------------------------------------------------
-    ' DICTIONARY FOR TOTAL CARTONS PER PO
-    '--------------------------------------------------
+
     Set poTotals = CreateObject("Scripting.Dictionary")
 
-    '--------------------------------------------------
-    ' FIRST PASS
-    ' Calculate total cartons for each PO
-    '--------------------------------------------------
+
     currentPO = ""
 
     For r = 8 To lastRow
@@ -367,11 +354,11 @@ Sub GeneratePackingList()
 
                 If IsNumeric(ws.Cells(r, "M").Value) Then
 
-                    cartons = CLng(ws.Cells(r, "M").Value)
+                    cartss = CLng(ws.Cells(r, "M").Value)
 
-                    If cartons > 0 Then
+                    If cartss > 0 Then
                         poTotals(currentPO) = _
-                            poTotals(currentPO) + cartons
+                            poTotals(currentPO) + cartss
                     End If
 
                 End If
@@ -410,12 +397,12 @@ Sub GeneratePackingList()
         ElseIf currentPO <> "" Then
 
             If IsNumeric(ws.Cells(r, "M").Value) Then
-                cartons = CLng(ws.Cells(r, "M").Value)
+                cartss = CLng(ws.Cells(r, "M").Value)
             Else
-                cartons = 0
+                cartss = 0
             End If
 
-            If cartons > 0 Then
+            If cartss > 0 Then
 
                 styleVal = ws.Cells(r, "N").Value
                 pieces = Val(ws.Cells(r, "O").Value)
@@ -423,7 +410,7 @@ Sub GeneratePackingList()
                 deptVal = ws.Cells(r, "Q").Value
 
                 ' Pieces per carton
-                unitCS = pieces / cartons
+                unitCS = pieces / cartss
 
                 ' Total pages for this PO
                 If poTotals.Exists(currentPO) Then
@@ -437,7 +424,7 @@ Sub GeneratePackingList()
                 '--------------------------------------
                 Dim i As Long
 
-                For i = 1 To cartons
+                For i = 1 To cartss
 
                     pageCounter = pageCounter + 1
 
